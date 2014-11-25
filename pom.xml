@@ -20,7 +20,7 @@
             <url>http://repo.bukkit.org/content/groups/public/</url>
         </repository>
 
-        <!-- Hawk Repo -->
+        <!-- DSH Repo -->
         <repository>
             <id>dsh-repo</id>
             <url>http://repo.dsh105.com/</url>

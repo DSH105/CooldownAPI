@@ -22,7 +22,15 @@ public class Cooldown {
     }
 
     public Player getPlayer() {
-        return IdentUtil.getPlayerOf(getPlayerIdent());
+        return IdentUtil.getPlayerOf(playerIdent);
+    }
+
+    public void setCooldownTime(long cooldownTime) {
+        this.cooldownTime = cooldownTime;
+    }
+
+    public void setCooldownTime(long cooldownTime, TimeUnit timeUnit) {
+        this.cooldownTime = timeUnit.toMilliseconds(cooldownTime);
     }
 
     public long getCooldownTime() {
@@ -34,16 +42,20 @@ public class Cooldown {
     }
 
     public long getStartTime(TimeUnit timeUnit) {
-        return timeUnit.getTime(getStartTime());
+        return timeUnit.getTime(startTime);
+    }
+
+    public long getTimeLeft(TimeUnit timeUnit) {
+        return timeUnit.getTime(getTimeLeft());
     }
 
     public long getTimeLeft() {
-        long timePassed = System.currentTimeMillis() - getStartTime();
-        long timeLeft = timePassed - getCooldownTime();
+        long timePassed = System.currentTimeMillis() - startTime;
+        long timeLeft = timePassed - cooldownTime;
         return timeLeft <= 0 ? 0 : timeLeft;
     }
 
-    public boolean finished() {
+    public boolean isFinished() {
         boolean finished = getTimeLeft() > 1;
         if (finished) {
             cancel();
@@ -53,6 +65,15 @@ public class Cooldown {
 
     public void cancel() {
         CooldownAPI.cancel(this);
+    }
+
+    public void restart(long cooldownTime) {
+        this.restart(cooldownTime, TimeUnit.MILLISECONDS);
+    }
+
+    public void restart(long cooldownTime, TimeUnit timeUnit) {
+        this.setCooldownTime(cooldownTime, timeUnit);
+        restart();
     }
 
     public void restart() {
